@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>We Are All Capable — Support Hub</title>
+  <meta name="description" content="Support site for people with disabilities — accessible UI, login session, and service listings.">
+  <link rel="icon" href="/images/favicon.ico">
+  <style>
+    :root{
+      --bg:#0f1724; --card:#ffffff; --muted:#6b7280; --accent:#0ea5a4; --radius:12px;
+      --maxw:1000px; --fs-base:16px;
+    }
+    *{box-sizing:border-box}
+    html{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; font-size:var(--fs-base);}
+    body{margin:0; background:linear-gradient(180deg,#071124 0%, #0b1220 60%), url('') center/cover no-repeat; color:var(--bg); min-height:100vh; display:flex; align-items:center; justify-content:center; padding:2rem;}
+
+    /* Page shell */
+    .site{width:100%; max-width:var(--maxw); margin:0 auto;}
+    header{display:flex; align-items:center; justify-content:space-between; gap:1rem;}
+    .logo{display:flex; gap:.75rem; align-items:center}
+    .logo .badge{background:var(--accent); color:#fff; padding:.4rem .6rem; border-radius:8px; font-weight:700}
+    nav a{color:var(--card); text-decoration:none; margin-left:.75rem}
+
+    /* Hero */
+    .hero{background:linear-gradient(90deg, rgba(14,165,164,0.08), rgba(79,70,229,0.06)); border-radius:var(--radius); padding:2rem; display:grid; grid-template-columns:1fr 320px; gap:1.5rem; align-items:center; color:var(--card);}
+    .hero h1{margin:0 0 .5rem; font-size:1.8rem}
+    .sub{color:var(--muted); margin-bottom:1rem}
+    .cta{display:flex; gap:.5rem}
+    .btn{background:var(--accent); color:white; border:none; padding:.6rem .9rem; border-radius:10px; cursor:pointer; font-weight:600}
+    .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,0.12)}
+
+    /* Tools (accessibility bar) */
+    .a11y-bar{display:flex; gap:.5rem; align-items:center}
+    .tool{background:rgba(255,255,255,0.04); padding:.4rem .6rem; border-radius:8px; color:var(--card); cursor:pointer}
+
+    /* Card list */
+    .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem; margin-top:1rem}
+    .card{background:rgba(255,255,255,0.04); padding:1rem; border-radius:12px; color:var(--card)}
+    .card h3{margin:0 0 .5rem}
+    .muted{color:var(--muted)}
+
+    /* Login modal */
+    .modal{position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(2,6,23,0.6);}
+    .modal .box{background:#fff; color:#06121a; padding:1.25rem; width:360px; border-radius:12px; box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+    .modal h2{margin:0 0 .5rem}
+    .field{display:flex; flex-direction:column; margin-bottom:.6rem}
+    label{font-size:.9rem; margin-bottom:.25rem}
+    input[type=text], input[type=email], input[type=password]{padding:.6rem; border-radius:8px; border:1px solid #e6e9ee}
+    .error{color:#b91c1c; font-size:.85rem; height:1.1rem}
+
+    /* Session banner */\    
+    .session{display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:1rem}
+    .session .pill{background:rgba(255,255,255,0.06); padding:.4rem .7rem; border-radius:999px; color:var(--card)}
+
+    footer{margin-top:1.25rem; text-align:center; color:var(--muted); font-size:.9rem}
+
+    /* Accessibility helpers */
+    .high-contrast body, .high-contrast .hero{background:#000; color:#fff}
+    .large-text{font-size:18px}
+
+    /* Focus and keyboard */\    
+    :focus{outline:3px solid rgba(14,165,164,0.18); outline-offset:3px}
+
+    /* Responsive */
+    @media (max-width:820px){
+      .hero{grid-template-columns:1fr;}
+      body{padding:1rem}
+    }
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      *{transition:none !important}
+    }
+
+    /* Large decorative quote */
+    .quote{font-weight:700; font-size:1.1rem; color:rgba(255,255,255,0.9)}
+  </style>
+</head>
+<body>
+  <div class="site" id="siteRoot">
+    <header>
+      <div class="logo">
+        <div class="badge">CAPABLE</div>
+        <div>
+          <div style="font-weight:700;color:var(--card)">Support Hub</div>
+          <div style="font-size:.9rem;color:var(--muted)">We are all capable — just in different ways.</div>
+        </div>
+      </div>
+      <nav aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="home" aria-labelledby="heroTitle">
+        <div>
+          <h1 id="heroTitle">Inclusive Support for People with Disabilities</h1>
+          <p class="sub">Tools, guidance and local services — designed with accessibility at the core.</p>
+          <div class="cta">
+            <button id="openServices" class="btn">See Services</button>
+            <button id="openContact" class="btn ghost">Contact Us</button>
+          </div>
+          <div style="margin-top:1rem" class="a11y-bar" aria-hidden="false">
+            <button class="tool" id="toggleContrast" title="Toggle high contrast">High Contrast</button>
+            <button class="tool" id="increaseText" title="Increase text size">A+</button>
+            <button class="tool" id="decreaseText" title="Decrease text size">A-</button>
+            <button class="tool" id="reduceMotion" title="Reduce motion">Reduce Motion</button>
+          </div>
+        </div>
+
+        <aside aria-label="Quick info" style="padding:1rem">
+          <div class="card">
+            <p class="quote">“We are all capable — just in different ways.”</p>
+            <p class="muted" style="margin-top:.6rem">Login to access personalised support and bookmarks. The site respects your preferences and stores session locally.</p>
+            <div style="margin-top:1rem" class="session">
+              <div class="pill" id="sessionPill">Not logged in</div>
+              <div>
+                <button id="loginBtn" class="btn">Login</button>
+                <button id="logoutBtn" class="btn ghost" style="display:none">Logout</button>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="services" aria-labelledby="servicesTitle">
+        <h2 id="servicesTitle" style="color:var(--card); margin-top:1rem">Services & Support</h2>
+        <p class="muted">A few of the ways our group helps the community.</p>
+        <div class="cards" id="cardsList">
+          <article class="card" tabindex="0">
+            <h3>Accessible Transport</h3>
+            <p class="muted">Information and booking assistance for accessible travel.</p>
+          </article>
+          <article class="card" tabindex="0">
+            <h3>Employment Support</h3>
+            <p class="muted">CV help, interview coaching and employer links.</p>
+          </article>
+          <article class="card" tabindex="0">
+            <h3>Assistive Technology</h3>
+            <p class="muted">Advice and demos of tools to make daily tasks easier.</p>
+          </article>
+          <article class="card" tabindex="0">
+            <h3>Peer Mentoring</h3>
+            <p class="muted">Volunteer mentors who understand lived experience.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="contact" aria-labelledby="contactTitle" style="margin-top:1rem">
+        <h2 id="contactTitle" style="color:var(--card)">Contact & Request Help</h2>
+        <p class="muted">Fill this form to request support. All fields are keyboard-accessible.</p>
+
+        <form id="contactForm" class="card" aria-describedby="formHelp">
+          <div id="formHelp" class="muted">We will not share your details. Required fields are marked.</div>
+          <div class="field">
+            <label for="name">Full name <span aria-hidden="true">*</span></label>
+            <input id="name" name="name" type="text" required>
+            <div class="error" id="errName" aria-live="polite"></div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email <span aria-hidden="true">*</span></label>
+            <input id="email" name="email" type="email" required>
+            <div class="error" id="errEmail" aria-live="polite"></div>
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone</label>
+            <input id="phone" name="phone" type="text" pattern="\+?[0-9\s\-]{7,15}" placeholder="+44 7123 456789">
+            <div class="error" id="errPhone" aria-live="polite"></div>
+          </div>
+
+          <div class="field">
+            <label for="needs">Briefly describe the support you need <span aria-hidden="true">*</span></label>
+            <textarea id="needs" name="needs" rows="4" required></textarea>
+            <div class="error" id="errNeeds" aria-live="polite"></div>
+          </div>
+
+          <div style="display:flex; gap:.5rem; align-items:center">
+            <button type="submit" class="btn">Submit Request</button>
+            <div id="formMsg" class="muted" role="status" aria-live="polite"></div>
+          </div>
+        </form>
+      </section>
+
+    </main>
+
+    <footer>
+      <div>Created by your team • Remember to add your report and references</div>
+    </footer>
+  </div>
+
+  <!-- Login modal (hidden by default) -->
+  <div id="modal" class="modal" style="display:none" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="box">
+      <h2 id="modalTitle">Sign in</h2>
+      <form id="loginForm">
+        <div class="field"><label for="user">Username</label><input id="user" name="user" type="text" required><div class="error" id="errUser"></div></div>
+        <div class="field"><label for="pass">Password</label><input id="pass" name="pass" type="password" required><div class="error" id="errPass"></div></div>
+        <div style="display:flex; justify-content:flex-end; gap:.5rem">
+          <button type="button" id="closeModal" class="btn ghost">Close</button>
+          <button type="submit" class="btn">Login</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Simple session using localStorage
+    const modal = document.getElementById('modal');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const sessionPill = document.getElementById('sessionPill');
+    const loginForm = document.getElementById('loginForm');
+
+    function updateSessionUI(){
+      const user = localStorage.getItem('capable_user');
+      if(user){
+        sessionPill.textContent = `Signed in as ${user}`;
+        loginBtn.style.display='none'; logoutBtn.style.display='inline-block';
+      } else {
+        sessionPill.textContent = 'Not logged in';
+        loginBtn.style.display='inline-block'; logoutBtn.style.display='none';
+      }
+    }
+
+    // Show modal on first load if no session
+    window.addEventListener('load', ()=>{
+      updateSessionUI();
+      if(!localStorage.getItem('capable_user')){
+        modal.style.display='flex';
+        document.getElementById('user').focus();
+      }
+    });
+
+    document.getElementById('closeModal').addEventListener('click', ()=>{ modal.style.display='none'; });
+    loginBtn.addEventListener('click', ()=>{ modal.style.display='flex'; document.getElementById('user').focus(); });
+    logoutBtn.addEventListener('click', ()=>{ localStorage.removeItem('capable_user'); updateSessionUI(); alert('You have been signed out'); });
+
+    loginForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const user = document.getElementById('user').value.trim();
+      const pass = document.getElementById('pass').value.trim();
+      if(!user){ document.getElementById('errUser').textContent='Enter a username'; return; }
+      if(pass.length < 4){ document.getElementById('errPass').textContent='Password too short'; return; }
+      localStorage.setItem('capable_user', user);
+      document.getElementById('errUser').textContent=''; document.getElementById('errPass').textContent='';
+      modal.style.display='none'; updateSessionUI();
+    });
+
+    // Accessibility toolbar actions
+    document.getElementById('toggleContrast').addEventListener('click', ()=>{
+      document.documentElement.classList.toggle('high-contrast');
+    });
+    document.getElementById('increaseText').addEventListener('click', ()=>{
+      document.documentElement.classList.add('large-text');
+    });
+    document.getElementById('decreaseText').addEventListener('click', ()=>{
+      document.documentElement.classList.remove('large-text');
+    });
+    document.getElementById('reduceMotion').addEventListener('click', ()=>{
+      // Add a class that developers can respect, here we simply toggle an attribute
+      document.documentElement.style.setProperty('--reduced-motion','1');
+      alert('Reduce motion preference set — animations will be minimized.');
+    });
+
+    // Simple form validation & save to localStorage
+    const form = document.getElementById('contactForm');
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('name');
+      const email = document.getElementById('email');
+      const phone = document.getElementById('phone');
+      const needs = document.getElementById('needs');
+      let ok = true;
+      if(name.value.trim()===''){ document.getElementById('errName').textContent='Name required'; ok=false; } else document.getElementById('errName').textContent='';
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)){ document.getElementById('errEmail').textContent='Valid email required'; ok=false; } else document.getElementById('errEmail').textContent='';
+      if(needs.value.trim()===''){ document.getElementById('errNeeds').textContent='Please describe your need'; ok=false; } else document.getElementById('errNeeds').textContent='';
+
+      if(!ok) { document.getElementById('formMsg').textContent='Fix errors above'; return; }
+      // Save request
+      const requests = JSON.parse(localStorage.getItem('capable_requests')||'[]');
+      requests.push({name:name.value, email:email.value, phone:phone.value, needs:needs.value, date:new Date().toISOString()});
+      localStorage.setItem('capable_requests', JSON.stringify(requests));
+      document.getElementById('formMsg').textContent = 'Request submitted — thank you.';
+      form.reset();
+    });
+
+    // Quick actions
+    document.getElementById('openServices').addEventListener('click', ()=>{ document.getElementById('services').scrollIntoView({behavior:'smooth'}); });
+    document.getElementById('openContact').addEventListener('click', ()=>{ document.getElementById('contact').scrollIntoView({behavior:'smooth'}); });
+
+  </script>
+</body>
+</html>
